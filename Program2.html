@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<style>
+body {
+  background: url('https://www.creativefabrica.com/wp-content/uploads/2018/11/Pizza-Logo-by-Friendesign-Acongraphic-3-580x386.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+}
+</style>
+
+<title>Pizza Assignment</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta content="en-us" http-equiv="Content-Language">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+  if (typeof jQuery == 'undefined') {
+  document.write(unescape("%3Cscript src='jquery-3.2.1.js' type='text/javascript'%3E%3C/script%3E")); }
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+       $("#getFeedback").click( function() {
+
+			var whichOne = $('input:radio[name=enthusiasm]:checked').val();
+			
+			if( whichOne === undefined )
+	       		$("#msgHere").html("Choose an option!");
+	       	else if( whichOne === "Tomato" )
+	       		$("#msgHere").html("Tomatoes are actually fruits!!");
+	       	else if( whichOne === "Beet" )
+	       		$("#msgHere").html("I dont want to talk about Beets. Disgusting!");
+	       	else if( whichOne === "Carrot" )
+	       		$("#msgHere").html("Bunnies love carrots!");
+	       	else if( whichOne === "Potato" )
+	       		$("#msgHere").html("Potatoes come in different colors!");
+			else 
+	       		$("#msgHere").html( "INTERNAL ERROR: We should never execute this line of code!!");
+
+
+       });
+    });
+</script>
+
+</head>
+
+<body>
+
+<div class="container-fluid">
+
+	<div class="jumbotron"> 
+		<h1 class="text-center"><b><u>UWB Halal Pizza!</u></b></h1>
+	</div>
+	
+	<h2 class="text-success text-center bg-primary">Please place your pizza order below</h2><br/>
+	<h4 class="text-primary bg-primary">Total price of your pizza will depend on selected features and will be displayed at the bottom</h4>
+	
+	<form>
+	
+	<p>
+	<input type="radio" name="enthusiasm" value="Tomato">Tomato<br/>
+	<input type="radio" name="enthusiasm" value="Beet"> Beet<br/>
+	<input type="radio" name="enthusiasm" value="Carrot">Carrot<br/>
+	<input type="radio" name="enthusiasm" value="Potato">Potato<br/>
+	<input type="button" id="getFeedback" value="Click here for fun fact!">
+	</p>
+	
+	</form>
+
+	<p id="msgHere">Fun fact about the selected vegetable will appear here!!</p>
+
+</div>
+
+</body>
+
+</html>
