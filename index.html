@@ -77,39 +77,96 @@
                     var small_size = document.getElementById("rd1_size");
                     var medium_size = document.getElementById("rd2_size");
                     var large_size = document.getElementById("rd3_size");
+
                     // prices
                     var size2crust = [[12,14,16],
                                       [15,17,19],
                                       [18,20,22]]
-
-                    if(small_size.clicked == true){
+                    var size2toppings = [[0,1,2,3],
+                                         [0,2,4,6],
+                                         [0,3,6,9]]
+                    if(small_size.checked == true){
                         curr_size = 0;
-                        check_crust_type(total_cost,curr_size);
+                        console.log("ur in small size")
+                        total_cost = check_crust_type(size2crust,total_cost,curr_size);
+                        total_cost = calculate_toppings(size2toppings,total_cost,curr_size);
+                        alert("cost --> " + total_cost);
                     }
-                    else if(medium_size.clicked == true){
+                    else if(medium_size.checked == true){
                         curr_size = 1;
-                        check_crust_type(total_cost,curr_size);
+                        total_cost = check_crust_type(size2crust,total_cost,curr_size);
+                        total_cost = calculate_toppings(size2toppings,total_cost,curr_size);
+                        alert("cost --> " + total_cost);
                     }
-                    else if(large_size.clicked == true){
+                    else if(large_size.checked == true){
                         curr_size = 2;
-                        check_crust_type(total_cost,curr_size);
+                        total_cost = check_crust_type(size2crust,total_cost,curr_size);
+                        total_cost = calculate_toppings(size2toppings,total_cost,curr_size);
+                        alert("cost --> " + total_cost);
                     }
+                    //alert("total_cost = " + total_cost);
 
-                    function check_crust_type(){
+                    function check_crust_type(size2crust_table,cost,size){
                         var thin = document.getElementById("rd1_crust");
                         var regular = document.getElementById("rd2_crust");
                         var deep = document.getElementById("rd3_crust");
 
                         if(thin.checked){
                             curr_crust = 0;
-                            total_cost += size2crust[0][0]
+                            //alert("--> " + size2crust[size][curr_crust]);
+                            cost += size2crust[size][curr_crust];
                         }
-                        else if(regular.clicked){
+                        else if(regular.checked){
                             curr_crust = 1;
+                            //alert("--> " + size2crust[size][curr_crust]);
+                            cost += size2crust[size][curr_crust];
                         }
-                        else if(deep.clicked){
+                        else if(deep.checked){
                             curr_crust = 2;
+                            //alert("--> " + size2crust[size][curr_crust]);
+                            cost += size2crust[size][curr_crust];
                         }
+                        return cost;
+                    }
+
+                    function calculate_toppings(size2toppings_table,cost,size){
+                        var topping1 = document.getElementById("cb1_topping");
+                        var topping2 = document.getElementById("cb2_topping");
+                        var topping3 = document.getElementById("cb3_topping");
+                        var topping4 = document.getElementById("cb4_topping");
+                        var topping5 = document.getElementById("cb5_topping");
+                        var topping6 = document.getElementById("cb6_topping");
+                        var topping7 = document.getElementById("cb7_topping");
+
+                        var toppings = [topping1,topping2,topping3,topping4,topping5,topping6,topping7];
+                        var topping_count = 0;
+                        var topping = null;
+                        for (topping of toppings){
+                            if(topping.checked){
+                                topping_count++;
+                            }
+                        }
+                        console.log("num topping count = " + topping_count);
+                        if(topping_count == 0){
+                            //alert("--> " + size2toppings_table[size][topping_count]);
+                            cost += size2toppings_table[size][topping_count];
+                        }
+                        else if(topping_count == 1){
+                            curr_crust = 1;
+                            //alert("--> " + size2toppings_table[size][topping_count]);
+                            cost += size2toppings_table[size][topping_count];
+                        }
+                        else if(topping_count == 2){
+                            curr_crust = 2;
+                            //alert("--> " + size2toppings_table[size][topping_count]);
+                            cost += size2toppings_table[size][topping_count];
+                        }
+                        else if(topping_count == 3){
+                            curr_crust = 3;
+                            //alert("--> " + size2toppings_table[size][topping_count]);
+                            cost += size2toppings_table[size][topping_count];
+                        }
+                        return cost;
                     }
                 })
             });
