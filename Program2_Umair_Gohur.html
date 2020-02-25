@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+		<style>
+            body {
+                background: url('https://www.creativefabrica.com/wp-content/uploads/2018/11/Pizza-Logo-by-Friendesign-Acongraphic-3-580x386.jpg') no-repeat center center fixed;
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                background-size: cover;
+                -o-background-size: cover;
+            }
+			
+            h3 {
+                margin-left : 75px;
+            }
+			
+            form {
+                margin-left : 100px;
+            }
+			
+            .submitButton {
+                height: 70px;
+                width: 200px;
+                margin-bottom: 30px;
+            }
+			
+		</style>
+	
+		<title>Pizza Assignment 2</title>
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta content="en-us" http-equiv="Content-Language">
+		
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+		
+		<script type="text/javascript">
+			if (typeof jQuery == 'undefined') {
+			document.write(unescape("%3Cscript src='jquery-3.2.1.js' type='text/javascript'%3E%3C/script%3E")); }
+		</script>	
+		
+		<script>
+            $(document).ready(function() {
+                $("#calcButton").click(function(){
+                    main();
+                })
+            });
+
+            function main(){
+                var total_cost = 0;
+                var curr_size = 0;
+                var curr_crust = 0;
+                var summary_str = "";
+
+                var small_size = document.getElementById("rd1_size");
+                var medium_size = document.getElementById("rd2_size");
+                var large_size = document.getElementById("rd3_size");
+
+                // price tables
+                var size2crust = [[12,14,16],
+                                 [15,17,19],
+                                 [18,20,22]]
+                var size2toppings = [[0,1,2,3],
+                                    [0,2,4,6],
+                                    [0,3,6,9]]
+                if(small_size.checked == true){
+                    curr_size = 0;
+                    summary_str += "Small Pizza\n";
+                }
+                else if(medium_size.checked == true){
+                    curr_size = 1;
+                    summary_str += "Medium Pizza\n";
+                }
+                else if(large_size.checked == true){
+                    curr_size = 2;
+                    summary_str += "Large Pizza\n";   
+                }
+                summary_str = check_sauce_type(summary_str);
+                var crust_info = check_crust_type(size2crust,total_cost,curr_size,summary_str);
+                total_cost = crust_info.first;
+                summary_str = crust_info.second;
+                var topping_info = calculate_toppings(size2toppings,total_cost,curr_size,summary_str);
+                total_cost = topping_info.first;
+                summary_str = topping_info.second;
+
+                if(total_cost != undefined){
+                    alert("------ Order Summary ------\n" + summary_str + "\n Total: $" + total_cost);
+					$("#msg").html("You ordered a ( " + summary_str + ") for a cost of: $" + total_cost);
+					
+                }
+            }
+
+            function check_sauce_type(summary){
+                var red = document.getElementById("rd1_sauce");
+                var white = document.getElementById("rd2_sauce");
+                var green = document.getElementById("rd3_sauce");
+
+                if(red.checked){
+                    summary += "Red Sauce\n";
+                }
+                else if(white.checked){
+                    summary += "White Sauce\n";
+                }
+                else if(green.checked){
+                    summary += "Green Sauce\n";
+                }
+                return summary;
+            }
+            
+            function check_crust_type(size2crust_table,cost,size,summary){
+                var thin = document.getElementById("rd1_crust");
+                var regular = document.getElementById("rd2_crust");
+                var deep = document.getElementById("rd3_crust");
+
+                if(thin.checked){
+                    curr_crust = 0;
+                    summary += "Thin Crust\n";
+                    cost += size2crust_table[size][curr_crust];
+                }
+                else if(regular.checked){
+                    curr_crust = 1;
+                    summary += "Regular Crust\n";
+                    cost += size2crust_table[size][curr_crust];
+                }
+                else if(deep.checked){
+                    curr_crust = 2;
+                    summary += "Deep Crust\n";
+                    cost += size2crust_table[size][curr_crust];
+                }
+                return {
+                    first: cost,
+                    second: summary
+                };
+            }
+
+            function calculate_toppings(size2toppings_table,cost,size,summary){
+                var topping1 = document.getElementById("cb1_topping");
+                var topping2 = document.getElementById("cb2_topping");
+                var topping3 = document.getElementById("cb3_topping");
+                var topping4 = document.getElementById("cb4_topping");
+                var topping5 = document.getElementById("cb5_topping");
+                var topping6 = document.getElementById("cb6_topping");
+                var topping7 = document.getElementById("cb7_topping");
+                
+                var selected_toppings = [];
+                var toppings = [topping1,topping2,topping3,topping4,topping5,topping6,topping7];
+                var topping_count = 0;
+                var topping = null;
+                for (topping of toppings){
+                    if(topping.checked){
+                        selected_toppings.push(topping.value);
+                        topping_count++;
+                    }
+                }
+
+                if(topping_count > 3){
+                    alert("Cannot have more than 3 toppings");
+                    return 0;
+                }
+
+                for (topping of selected_toppings){
+                    summary += (topping+"\n");
+                }
+
+                console.log("num topping count = " + topping_count);
+                if(topping_count == 0){
+                    //alert("--> " + size2toppings_table[size][topping_count]);
+                    cost += size2toppings_table[size][topping_count];
+                }
+                else if(topping_count == 1){
+                    curr_crust = 1;
+                    //alert("--> " + size2toppings_table[size][topping_count]);
+                    cost += size2toppings_table[size][topping_count];
+                }
+                else if(topping_count == 2){
+                    curr_crust = 2;
+                    //alert("--> " + size2toppings_table[size][topping_count]);
+                    cost += size2toppings_table[size][topping_count];
+                }
+                else if(topping_count == 3){
+                    curr_crust = 3;
+                    //alert("--> " + size2toppings_table[size][topping_count]);
+                    cost += size2toppings_table[size][topping_count];
+                }
+                return {
+                    first: cost,
+                    second: summary
+                };
+            }
+        </script>
+		
+		
+    </head>
+	
+	
+    <body>
+		<div class="jumbotron"> 
+			<h1 class="text-center"><b><u>UWB Halal Pizza!</u></b></h1>
+			<h3 class="text-center"><b>Gohur and Umair</b></h3>
+		</div>
+		
+		<h2 class="text-center bg-primary">Please place your pizza order below</h2><br/>
+		<h4 class="text-center bg-danger">Total price of your pizza will depend on selected features and will be displayed at the bottom</h4>
+        
+        <h3><b>Pizza Size</b></h3>
+        <form>
+            <input name="grp1" id="rd1_size" type="radio" value="small">Small</input>
+            <br>
+            <input name="grp1" id="rd2_size" type="radio" value="medium">Medium</input>
+            <br>
+            <input name="grp1" id="rd3_size" type="radio" value="large">Large</input>
+            <br>
+        </form>
+
+        <h3><b>Crust Type</b></h3>
+        <form>
+            <input name="grp2" id="rd1_crust" type="radio" value="thin">Thin</input>
+            <br>
+            <input name="grp2" id="rd2_crust" type="radio" value="regular">Regular</input>
+            <br>
+            <input name="grp2" id="rd3_crust" type="radio" value="deep">Deep Dish</input>
+            <br>
+        </form>
+
+        <h3><b>Sauce Type</b></h3>
+        <form>
+            <input name="grp3" id="rd1_sauce" type="radio" value="red">Red</input>
+            <br>
+            <input name="grp3" id="rd2_sauce" type="radio" value="white">White</input>
+            <br>
+            <input name="grp3" id="rd3_sauce" type="radio" value="green">Green</input>
+            <br>
+        </form>
+
+        <h3><b>Toppings</b></h3>
+        <form>
+            <input id="cb1_topping" type="checkbox" value="Pepperoni">Pepperoni</input>
+            <br>
+            <input id="cb2_topping" type="checkbox" value="Onion">Onion</input>
+            <br>
+            <input id="cb3_topping" type="checkbox" value="Sausage">Sausage</input>
+            <br>
+            <input id="cb4_topping" type="checkbox" value="Mushrooms">Mushrooms</input>
+            <br>
+            <input id="cb5_topping" type="checkbox" value="Peppers">Peppers</input>
+            <br>
+            <input id="cb6_topping" type="checkbox" value="Olives">Olives</input>
+            <br>
+            <input id="cb7_topping" type="checkbox" value="Garlic">Garlic</input>
+            <br>
+        </form>
+
+        <center>
+            <form>
+                <input class="submitButton" id="calcButton" type="button" value="Order Pizza"></input>
+				<h4 class="text-success bg-success" id="msg"><b>Your pizza confirmation wil appear here!</b></h4>
+			</form>
+        </center>
+
+        
+    </body>
+</html>
