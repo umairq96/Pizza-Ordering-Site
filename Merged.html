@@ -143,6 +143,7 @@
                     curr_size = 2;
                     summary_str += "Large Pizza\n";   
                 }
+                summary_str = check_sauce_type(summary_str);
                 var crust_info = check_crust_type(size2crust,total_cost,curr_size,summary_str);
                 total_cost = crust_info.first;
                 summary_str = crust_info.second;
@@ -155,6 +156,24 @@
                 }
             }
 
+            function check_sauce_type(summary){
+                var red = document.getElementById("rd1_sauce");
+                var white = document.getElementById("rd2_sauce");
+                var green = document.getElementById("rd3_sauce");
+
+                if(red.checked){
+                    summary += "Red Sauce\n";
+                }
+                else if(white.checked){
+                    summary += "White Sauce\n";
+                }
+                else if(green.checked){
+                    summary += "Green Sauce\n";
+                }
+                return summary;
+
+            }
+            
             function check_crust_type(size2crust_table,cost,size,summary){
                 var thin = document.getElementById("rd1_crust");
                 var regular = document.getElementById("rd2_crust");
@@ -236,6 +255,5 @@
                 };
             }
         </script>
-
     </body>
 </html>
