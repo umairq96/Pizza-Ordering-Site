@@ -17,6 +17,11 @@
             form {
                 margin-left : 100px;
             }
+            .submitButton {
+                height: 70px;
+                width: 200px;
+                margin-bottom: 30px;
+            }
 		</style>
 	
 		<title>Pizza Assignment 2</title>
@@ -80,13 +85,13 @@
 
         <h3>Toppings</h3>
         <form>
-            <input id="cb1_topping" type="checkbox" value="pepperoni">Pepperoni</input>
+            <input id="cb1_topping" type="checkbox" value="Pepperoni">Pepperoni</input>
             <br>
-            <input id="cb2_topping" type="checkbox" value="onion">Onion</input>
+            <input id="cb2_topping" type="checkbox" value="Onion">Onion</input>
             <br>
-            <input id="cb3_topping" type="checkbox" value="sausage">Sausage</input>
+            <input id="cb3_topping" type="checkbox" value="Sausage">Sausage</input>
             <br>
-            <input id="cb4_topping" type="checkbox" value="mushrooms">Mushrooms</input>
+            <input id="cb4_topping" type="checkbox" value="Mushrooms">Mushrooms</input>
             <br>
             <input id="cb5_topping" type="checkbox" value="Peppers">Peppers</input>
             <br>
@@ -98,7 +103,7 @@
 
         <center>
             <form>
-                <input id="calcButton" type="button" value="Order Pizza"></input>
+                <input class="submitButton" id="calcButton" type="button" value="Order Pizza"></input>
             </form>
         </center>
 
@@ -113,6 +118,7 @@
                 var total_cost = 0;
                 var curr_size = 0;
                 var curr_crust = 0;
+                var summary_str = "";
 
                 var small_size = document.getElementById("rd1_size");
                 var medium_size = document.getElementById("rd2_size");
@@ -120,53 +126,62 @@
 
                 // price tables
                 var size2crust = [[12,14,16],
-                                [15,17,19],
-                                [18,20,22]]
+                                 [15,17,19],
+                                 [18,20,22]]
                 var size2toppings = [[0,1,2,3],
                                     [0,2,4,6],
                                     [0,3,6,9]]
                 if(small_size.checked == true){
                     curr_size = 0;
-                    total_cost = check_crust_type(size2crust,total_cost,curr_size);
-                    total_cost = calculate_toppings(size2toppings,total_cost,curr_size);
+                    summary_str += "Small Pizza\n";
                 }
                 else if(medium_size.checked == true){
                     curr_size = 1;
-                    total_cost = check_crust_type(size2crust,total_cost,curr_size);
-                    total_cost = calculate_toppings(size2toppings,total_cost,curr_size);
+                    summary_str += "Medium Pizza\n";
                 }
                 else if(large_size.checked == true){
                     curr_size = 2;
-                    total_cost = check_crust_type(size2crust,total_cost,curr_size);
-                    total_cost = calculate_toppings(size2toppings,total_cost,curr_size);
+                    summary_str += "Large Pizza\n";   
                 }
+                var crust_info = check_crust_type(size2crust,total_cost,curr_size,summary_str);
+                total_cost = crust_info.first;
+                summary_str = crust_info.second;
+                var topping_info = calculate_toppings(size2toppings,total_cost,curr_size,summary_str);
+                total_cost = topping_info.first;
+                summary_str = topping_info.second;
 
-                if(total_cost != -1){
-                    alert("total_cost = " + total_cost);
+                if(total_cost != undefined){
+                    alert("------ Order Summary ------\n" + summary_str + "\n Total: $" + total_cost);
                 }
             }
 
-            function check_crust_type(size2crust_table,cost,size){
+            function check_crust_type(size2crust_table,cost,size,summary){
                 var thin = document.getElementById("rd1_crust");
                 var regular = document.getElementById("rd2_crust");
                 var deep = document.getElementById("rd3_crust");
 
                 if(thin.checked){
                     curr_crust = 0;
+                    summary += "Thin Crust\n";
                     cost += size2crust_table[size][curr_crust];
                 }
                 else if(regular.checked){
                     curr_crust = 1;
+                    summary += "Regular Crust\n";
                     cost += size2crust_table[size][curr_crust];
                 }
                 else if(deep.checked){
                     curr_crust = 2;
+                    summary += "Deep Crust\n";
                     cost += size2crust_table[size][curr_crust];
                 }
-                return cost;
+                return {
+                    first: cost,
+                    second: summary
+                };
             }
 
-            function calculate_toppings(size2toppings_table,cost,size){
+            function calculate_toppings(size2toppings_table,cost,size,summary){
                 var topping1 = document.getElementById("cb1_topping");
                 var topping2 = document.getElementById("cb2_topping");
                 var topping3 = document.getElementById("cb3_topping");
@@ -174,19 +189,25 @@
                 var topping5 = document.getElementById("cb5_topping");
                 var topping6 = document.getElementById("cb6_topping");
                 var topping7 = document.getElementById("cb7_topping");
-
+                
+                var selected_toppings = [];
                 var toppings = [topping1,topping2,topping3,topping4,topping5,topping6,topping7];
                 var topping_count = 0;
                 var topping = null;
                 for (topping of toppings){
                     if(topping.checked){
+                        selected_toppings.push(topping.value);
                         topping_count++;
                     }
                 }
 
                 if(topping_count > 3){
                     alert("Cannot have more than 3 toppings");
-                    return -1;
+                    return 0;
+                }
+
+                for (topping of selected_toppings){
+                    summary += (topping+"\n");
                 }
 
                 console.log("num topping count = " + topping_count);
@@ -209,7 +230,10 @@
                     //alert("--> " + size2toppings_table[size][topping_count]);
                     cost += size2toppings_table[size][topping_count];
                 }
-                return cost;
+                return {
+                    first: cost,
+                    second: summary
+                };
             }
         </script>
 
